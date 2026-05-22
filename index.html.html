@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>DR/VE Training Club — Cycle × Train × Sculpt · Norman, OK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700;1,900&family=Barlow:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --lime:      #b6ff39;
+  --lime-dk:   #94d41e;
+  --black:     #0a0a0a;
+  --off-black: #111111;
+  --surface:   #161616;
+  --surface2:  #1c1c1c;
+  --border:    rgba(255,255,255,0.08);
+  --white:     #f8f8f6;
+  --muted:     rgba(248,248,246,0.5);
+  --fd: 'Barlow Condensed', sans-serif;
+  --fb: 'Barlow', sans-serif;
+  --fm: 'Space Mono', monospace;
+}
+
+/* ═══════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:var(--black);color:var(--white);font-family:var(--fb);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;}
+
+/* ═══════════════════════════════════════════
+   PAGE SYSTEM (SPA routing)
+═══════════════════════════════════════════ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ═══════════════════════════════════════════
+   ANNOUNCEMENT BAR
+═══════════════════════════════════════════ */
+.announce{background:var(--lime);color:var(--black);text-align:center;padding:10px 20px;font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;position:relative;z-index:1000;}
+.announce a{color:var(--black);text-decoration:underline;}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav{position:sticky;top:0;z-index:900;background:var(--black);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:60px;}
+.nav-logo{font-family:var(--fd);font-weight:900;font-size:32px;letter-spacing:-.01em;line-height:1;color:var(--white);text-transform:uppercase;cursor:pointer;}
+.nav-logo .sl{color:var(--lime);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-pill{background:var(--lime);color:var(--black);font-family:var(--fm);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:9px 16px;border-radius:2px;white-space:nowrap;transition:background .2s;border:none;}
+.nav-pill:hover{background:var(--lime-dk);}
+.nav-pill.ghost{background:transparent;color:var(--white);border:1px solid var(--border);}
+.nav-pill.ghost:hover{border-color:var(--white);}
+.hamburger{background:none;border:none;padding:6px;display:flex;flex-direction:column;gap:5px;}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--white);transition:all .3s ease;transform-origin:center;}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4.7px,4.7px);}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4.7px,-4.7px);}
+
+/* ── DRAWER ── */
+.drawer{position:fixed;top:60px;left:0;right:0;bottom:0;background:var(--black);z-index:850;display:flex;flex-direction:column;padding:40px 24px 40px;overflow-y:auto;transform:translateX(100%);transition:transform .4s cubic-bezier(.77,0,.18,1);}
+.drawer.open{transform:translateX(0);}
+.drawer-links a{display:block;font-family:var(--fd);font-weight:900;font-size:52px;line-height:1.05;letter-spacing:-.01em;text-transform:uppercase;color:var(--white);padding:8px 0;border-bottom:1px solid var(--border);transition:color .2s;}
+.drawer-links a:hover,.drawer-links a.active-link{color:var(--lime);}
+.drawer-actions{margin-top:36px;display:flex;flex-direction:column;gap:10px;}
+.drawer-actions .nav-pill{display:block;text-align:center;padding:16px;font-size:13px;border-radius:2px;}
+.drawer-foot{margin-top:32px;display:flex;gap:20px;}
+.drawer-foot a{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+.drawer-foot a:hover{color:var(--lime);}
+
+/* ═══════════════════════════════════════════
+   SHARED COMPONENTS
+═══════════════════════════════════════════ */
+.section-label{font-family:var(--fm);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.section-label::before{content:'';width:20px;height:1px;background:var(--lime);}
+.section-label.dark{color:rgba(10,10,10,.45);}
+.section-label.dark::before{background:rgba(10,10,10,.35);}
+.section-title{font-family:var(--fd);font-weight:900;font-size:clamp(52px,16vw,88px);line-height:.9;letter-spacing:-.02em;text-transform:uppercase;}
+
+.btn-lime{display:block;text-align:center;background:var(--lime);color:var(--black);font-family:var(--fd);font-weight:900;font-size:20px;letter-spacing:.04em;text-transform:uppercase;padding:18px 24px;border-radius:2px;transition:background .2s;border:none;}
+.btn-lime:hover{background:var(--lime-dk);}
+.btn-outline{display:block;text-align:center;background:transparent;color:var(--white);font-family:var(--fd);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;padding:17px 24px;border:1px solid rgba(248,248,246,.3);border-radius:2px;transition:border-color .2s,background .2s;}
+.btn-outline:hover{border-color:var(--white);background:rgba(255,255,255,.04);}
+.btn-black{display:block;text-align:center;background:var(--black);color:var(--lime);font-family:var(--fd);font-weight:900;font-size:20px;letter-spacing:.04em;text-transform:uppercase;padding:18px 24px;border-radius:2px;transition:background .2s;}
+.btn-black:hover{background:#222;}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* Marquee */
+.marquee{background:var(--lime);padding:13px 0;overflow:hidden;white-space:nowrap;}
+.marquee-inner{display:inline-flex;animation:marquee 22s linear infinite;}
+.marquee-inner span{font-family:var(--fd);font-weight:900;font-size:17px;letter-spacing:.06em;text-transform:uppercase;color:var(--black);padding:0 20px;}
+.marquee-inner .sep{color:rgba(0,0,0,.3);font-size:12px;vertical-align:middle;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* Sticky CTA */
+.sticky-cta{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);z-index:800;background:var(--lime);color:var(--black);font-family:var(--fd);font-weight:900;font-size:18px;letter-spacing:.06em;text-transform:uppercase;padding:15px 36px;border-radius:2px;white-space:nowrap;box-shadow:0 8px 40px rgba(182,255,57,.35);transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;border:none;}
+.sticky-cta.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.sticky-cta:hover{background:var(--lime-dk);}
+
+/* FAQ shared */
+.faq-list{border-top:1px solid var(--border);}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-trigger{width:100%;background:none;border:none;color:var(--white);font-family:var(--fb);font-size:16px;font-weight:500;text-align:left;padding:22px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:16px;line-height:1.4;transition:color .2s;}
+.faq-trigger:hover{color:var(--lime);}
+.faq-icon{flex-shrink:0;width:26px;height:26px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--lime);font-size:18px;line-height:1;transition:transform .3s,border-color .2s;margin-top:1px;}
+.faq-item.open .faq-icon{transform:rotate(45deg);border-color:var(--lime);}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .4s ease;font-size:14px;color:rgba(248,248,246,.65);line-height:1.75;}
+.faq-item.open .faq-answer{max-height:500px;padding-bottom:24px;}
+.faq-answer a{color:var(--lime);text-decoration:underline;}
+
+/* Membership cards (shared) */
+.plan-stack{display:flex;flex-direction:column;gap:2px;}
+.plan-card{background:var(--surface);padding:28px 24px;position:relative;border-left:3px solid transparent;}
+.plan-card.hero-plan{background:#111;border-left-color:var(--lime);}
+.plan-flag{position:absolute;top:0;right:24px;background:var(--lime);color:var(--black);font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;font-weight:700;}
+.plan-name{font-family:var(--fd);font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.hero-plan .plan-name{color:var(--lime);}
+.plan-price-row{display:flex;align-items:flex-end;gap:4px;margin-bottom:4px;}
+.plan-dollar{font-family:var(--fd);font-weight:900;font-size:20px;color:var(--white);padding-bottom:10px;}
+.plan-amount{font-family:var(--fd);font-weight:900;font-size:72px;line-height:1;letter-spacing:-.03em;color:var(--white);}
+.plan-freq{font-family:var(--fm);font-size:11px;letter-spacing:.08em;color:var(--muted);padding-bottom:12px;text-transform:uppercase;}
+.plan-features{list-style:none;margin:20px 0 24px;display:flex;flex-direction:column;gap:0;}
+.plan-features li{font-size:14px;color:rgba(248,248,246,.65);padding:9px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;line-height:1.4;}
+.plan-features li::before{content:'—';color:var(--lime);font-size:12px;flex-shrink:0;margin-top:1px;}
+.plan-btn{display:block;text-align:center;background:var(--lime);color:var(--black);font-family:var(--fd);font-weight:900;font-size:18px;letter-spacing:.05em;text-transform:uppercase;padding:15px;border-radius:2px;transition:background .2s;border:none;}
+.plan-btn:hover{background:var(--lime-dk);}
+.plan-btn.ghost{background:transparent;color:var(--white);border:1px solid var(--border);}
+.plan-btn.ghost:hover{border-color:var(--white);background:rgba(255,255,255,.04);}
+
+/* Drop-in grid */
+.dropin-intro{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.dropin-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.dropin-card{background:var(--surface);padding:28px 20px;text-align:center;display:block;border-bottom:2px solid transparent;transition:border-color .2s,background .2s;}
+.dropin-card:hover{background:#1a1a1a;border-bottom-color:var(--lime);}
+.dropin-qty{font-family:var(--fd);font-weight:900;font-size:56px;line-height:1;letter-spacing:-.03em;color:var(--white);margin-bottom:4px;}
+.dropin-price{font-family:var(--fm);font-size:15px;font-weight:700;color:var(--lime);margin-bottom:4px;}
+.dropin-label{font-family:var(--fm);font-size:9px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;}
+.dropin-expiry{font-size:11px;color:rgba(248,248,246,.35);margin-top:6px;}
+
+/* Footer */
+footer{background:var(--off-black);border-top:1px solid var(--border);padding:56px 24px 40px;}
+.foot-logo{font-family:var(--fd);font-weight:900;font-size:56px;letter-spacing:-.01em;text-transform:uppercase;line-height:1;margin-bottom:6px;}
+.foot-logo .sl{color:var(--lime);}
+.foot-tagline{font-family:var(--fm);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:40px;}
+.foot-nav{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:40px;}
+.foot-col-title{font-family:var(--fm);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:14px;}
+.foot-col a{display:block;font-size:14px;color:rgba(248,248,246,.5);padding:4px 0;transition:color .2s;}
+.foot-col a:hover{color:var(--white);}
+.foot-social{display:flex;gap:12px;margin-bottom:40px;}
+.social-icon{width:42px;height:42px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s;}
+.social-icon:hover{border-color:var(--lime);background:rgba(182,255,57,.08);}
+.social-icon svg{fill:var(--white);width:16px;height:16px;}
+.foot-legal{display:flex;flex-wrap:wrap;gap:8px 16px;margin-bottom:24px;}
+.foot-legal a{font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(248,248,246,.3);transition:color .2s;}
+.foot-legal a:hover{color:var(--white);}
+.foot-copy{font-family:var(--fm);font-size:9px;letter-spacing:.08em;color:rgba(248,248,246,.25);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+
+/* ═══════════════════════════════════════════
+   PAGE: HOME
+═══════════════════════════════════════════ */
+
+/* Hero */
+.hero{min-height:calc(100svh - 60px);display:grid;position:relative;overflow:hidden;background:var(--black);}
+.hero-photo{position:absolute;inset:0;overflow:hidden;}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:brightness(.38);}
+.hero-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,10,10,.1) 0%,rgba(10,10,10,0) 40%,rgba(10,10,10,.7) 75%,rgba(10,10,10,1) 100%);}
+.hero-fallback{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 80% 20%,rgba(182,255,57,.07) 0%,transparent 55%),radial-gradient(ellipse 80% 60% at 10% 90%,rgba(182,255,57,.04) 0%,transparent 50%),var(--black);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;}
+.hero-body{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;padding:0 24px 48px;min-height:calc(100svh - 60px);}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;font-family:var(--fm);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:16px;opacity:0;animation:fadeUp .7s .1s ease forwards;}
+.hero-eyebrow::before{content:'';width:28px;height:1px;background:var(--lime);flex-shrink:0;}
+.hero-h1{font-family:var(--fd);font-weight:900;font-size:clamp(76px,24vw,130px);line-height:.88;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp .7s .2s ease forwards;}
+.hero-h1 em{font-style:italic;color:var(--lime);}
+.hero-desc{font-size:15px;line-height:1.7;color:rgba(248,248,246,.72);max-width:340px;margin-bottom:36px;opacity:0;animation:fadeUp .7s .3s ease forwards;}
+.hero-ctas{display:flex;flex-direction:column;gap:10px;opacity:0;animation:fadeUp .7s .4s ease forwards;}
+
+/* Philosophy */
+.philosophy{background:var(--white);color:var(--black);padding:72px 24px 80px;}
+.phil-headline{font-family:var(--fd);font-weight:900;font-size:clamp(52px,16vw,88px);line-height:.9;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:32px;}
+.phil-body{font-size:16px;line-height:1.75;color:rgba(10,10,10,.72);margin-bottom:48px;}
+.pillars{display:flex;flex-direction:column;border-top:1px solid rgba(10,10,10,.1);}
+.pillar{padding:24px 0;border-bottom:1px solid rgba(10,10,10,.1);}
+.pillar-num{font-family:var(--fm);font-size:10px;letter-spacing:.15em;color:rgba(10,10,10,.35);margin-bottom:8px;text-transform:uppercase;}
+.pillar-title{font-family:var(--fd);font-weight:800;font-size:22px;letter-spacing:.02em;text-transform:uppercase;margin-bottom:6px;color:var(--black);}
+.pillar-desc{font-size:14px;color:rgba(10,10,10,.6);line-height:1.65;}
+
+/* Class tiles */
+.classes-section{background:var(--black);padding:72px 0 0;}
+.section-header{padding:0 24px 48px;}
+.class-tiles{display:flex;flex-direction:column;gap:2px;}
+.class-tile{position:relative;overflow:hidden;aspect-ratio:4/5;background:var(--surface);}
+.tile-photo{position:absolute;inset:0;}
+.tile-photo img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;filter:brightness(.45);}
+.class-tile:hover .tile-photo img{transform:scale(1.03);}
+.tile-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(10,10,10,.88) 100%);}
+.tile-cycle .tile-photo{background:linear-gradient(135deg,#1a1a1a 0%,#0d1a00 100%);}
+.tile-train .tile-photo{background:linear-gradient(135deg,#1a1a1a 0%,#001a0d 100%);}
+.tile-sculpt .tile-photo{background:linear-gradient(135deg,#1a1a1a 0%,#001010 100%);}
+.tile-body{position:absolute;bottom:0;left:0;right:0;padding:28px 24px 32px;z-index:2;}
+.tile-tag{font-family:var(--fm);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--lime);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.tile-tag::before{content:'';width:16px;height:1px;background:var(--lime);}
+.tile-name{font-family:var(--fd);font-weight:900;font-size:64px;line-height:.88;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:14px;}
+.tile-desc{font-size:14px;line-height:1.65;color:rgba(248,248,246,.72);margin-bottom:20px;}
+.tile-link{font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--lime);display:inline-flex;align-items:center;gap:6px;transition:gap .2s;background:none;border:none;}
+.class-tile:hover .tile-link{gap:10px;}
+
+/* Intro block */
+.intro-block{background:var(--lime);color:var(--black);padding:64px 24px;position:relative;overflow:hidden;}
+.intro-block::before{content:'$10';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:var(--fd);font-weight:900;font-size:200px;line-height:1;color:rgba(0,0,0,.06);pointer-events:none;white-space:nowrap;letter-spacing:-.04em;}
+.intro-kicker{font-family:var(--fm);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(10,10,10,.55);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.intro-kicker::before{content:'';width:20px;height:1px;background:rgba(10,10,10,.4);}
+.intro-headline{font-family:var(--fd);font-weight:900;font-size:clamp(52px,18vw,96px);line-height:.88;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:20px;position:relative;}
+.intro-sub{font-size:15px;line-height:1.7;color:rgba(10,10,10,.72);margin-bottom:36px;max-width:320px;position:relative;}
+
+/* Memberships */
+.memberships{background:var(--black);padding:72px 24px;}
+.mem-toggle{display:flex;border:1px solid var(--border);border-radius:2px;overflow:hidden;margin:40px 0 36px;}
+.mem-toggle button{flex:1;background:none;border:none;color:var(--muted);font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:13px 10px;border-right:1px solid var(--border);transition:all .2s;}
+.mem-toggle button:last-child{border-right:none;}
+.mem-toggle button.on{background:var(--lime);color:var(--black);font-weight:700;}
+.mem-pane{display:none;}
+.mem-pane.on{display:block;}
+
+/* Testimonials */
+.testimonials{background:var(--surface);padding:72px 24px;}
+.testi-scroll{display:flex;flex-direction:column;gap:1px;margin-top:48px;}
+.testi-card{background:var(--black);padding:32px 24px;}
+.testi-stars{color:var(--lime);font-size:14px;letter-spacing:3px;margin-bottom:16px;}
+.testi-body{font-size:16px;line-height:1.7;font-style:italic;color:rgba(248,248,246,.85);margin-bottom:20px;font-weight:300;}
+.testi-name{font-family:var(--fm);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--lime);}
+
+/* Team preview */
+.team-preview{background:var(--surface);padding:72px 24px;}
+.team-grid-home{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px;}
+.team-card-home{position:relative;overflow:hidden;background:var(--black);aspect-ratio:3/4;}
+.team-card-home img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .5s ease;filter:brightness(.7) grayscale(20%);}
+.team-card-home:hover img{transform:scale(1.04);}
+.team-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(10,10,10,.9) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:16px;}
+.team-overlay::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--lime);transform:scaleX(0);transform-origin:left;transition:transform .3s ease;}
+.team-card-home:hover .team-overlay::before{transform:scaleX(1);}
+.team-placeholder-home{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1a1a1a;font-family:var(--fd);font-weight:900;font-size:72px;color:rgba(255,255,255,.06);letter-spacing:-.02em;}
+.team-card-name{font-family:var(--fd);font-weight:800;font-size:22px;letter-spacing:.02em;text-transform:uppercase;line-height:1;margin-bottom:4px;}
+.team-card-role{font-family:var(--fm);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);}
+
+/* Amenities */
+.amenities{background:var(--white);color:var(--black);padding:72px 24px;}
+.amenity-list{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(10,10,10,.08);border:1px solid rgba(10,10,10,.08);border-radius:2px;overflow:hidden;margin-top:40px;}
+.amenity-item{background:var(--white);padding:22px 16px;display:flex;align-items:center;gap:12px;}
+.amenity-icon{font-size:20px;flex-shrink:0;}
+.amenity-text{font-family:var(--fd);font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;color:rgba(10,10,10,.8);}
+
+/* Contact */
+.contact{background:var(--black);padding:72px 24px;}
+.contact-details{margin-top:48px;display:flex;flex-direction:column;border-top:1px solid var(--border);}
+.contact-row{display:flex;justify-content:space-between;align-items:flex-start;padding:22px 0;border-bottom:1px solid var(--border);gap:16px;}
+.contact-key{font-family:var(--fm);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);flex-shrink:0;padding-top:2px;}
+.contact-val{font-size:15px;font-weight:500;color:var(--white);text-align:right;line-height:1.5;}
+.contact-btns{display:flex;flex-direction:column;gap:10px;margin-top:36px;}
+
+/* ═══════════════════════════════════════════
+   PAGE: CLASS TYPES
+═══════════════════════════════════════════ */
+.classes-page{background:var(--black);}
+
+/* Hero banner */
+.page-hero{padding:80px 24px 64px;background:var(--black);position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 100% 80% at 50% 0%,rgba(182,255,57,.06) 0%,transparent 65%);}
+.page-hero-label{font-family:var(--fm);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:20px;display:flex;align-items:center;gap:10px;position:relative;}
+.page-hero-label::before{content:'';width:20px;height:1px;background:var(--lime);}
+.page-hero-title{font-family:var(--fd);font-weight:900;font-size:clamp(64px,20vw,110px);line-height:.88;letter-spacing:-.02em;text-transform:uppercase;position:relative;margin-bottom:24px;}
+.page-hero-sub{font-size:15px;line-height:1.75;color:rgba(248,248,246,.65);max-width:360px;position:relative;}
+
+/* Class format blocks */
+.class-formats{padding:0 0 72px;}
+
+.format-block{border-bottom:1px solid var(--border);overflow:hidden;}
+.format-block:last-child{border-bottom:none;}
+
+/* Photo + info layout */
+.format-photo{width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--surface);}
+.format-photo img{width:100%;height:100%;object-fit:cover;filter:brightness(.7);transition:transform .5s ease;}
+.format-block:hover .format-photo img{transform:scale(1.02);}
+.format-fallback-cycle{background:linear-gradient(135deg,#0d1400 0%,#1a2e00 50%,#0d1400 100%);}
+.format-fallback-train{background:linear-gradient(135deg,#001400 0%,#002e1a 50%,#001400 100%);}
+.format-fallback-sculpt{background:linear-gradient(135deg,#001414 0%,#002828 50%,#001414 100%);}
+
+.format-body{padding:32px 24px 40px;}
+.format-number{font-family:var(--fm);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:12px;}
+.format-name{font-family:var(--fd);font-weight:900;font-size:clamp(52px,16vw,80px);line-height:.88;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:6px;}
+.format-tagline{font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+.format-desc{font-size:15px;line-height:1.75;color:rgba(248,248,246,.72);margin-bottom:32px;}
+
+/* Sub-formats */
+.sub-formats{display:flex;flex-direction:column;gap:2px;margin-bottom:32px;}
+.sub-format{background:var(--surface);padding:20px 20px 22px;}
+.sub-format-name{font-family:var(--fd);font-weight:800;font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;}
+.sub-format-desc{font-size:13px;line-height:1.65;color:rgba(248,248,246,.62);}
+
+/* Stats row */
+.format-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:2px;overflow:hidden;margin-bottom:32px;}
+.format-stat{background:var(--surface);padding:16px 12px;text-align:center;}
+.stat-val{font-family:var(--fd);font-weight:900;font-size:28px;color:var(--lime);line-height:1;}
+.stat-key{font-family:var(--fm);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+
+/* Format CTAs */
+.format-ctas{display:flex;flex-direction:column;gap:10px;}
+
+/* What to expect */
+.what-expect{background:var(--surface);padding:72px 24px;}
+.expect-grid{display:flex;flex-direction:column;gap:1px;margin-top:48px;border-top:1px solid var(--border);}
+.expect-item{padding:24px 0;border-bottom:1px solid var(--border);}
+.expect-icon{font-size:24px;margin-bottom:12px;}
+.expect-title{font-family:var(--fd);font-weight:800;font-size:22px;letter-spacing:.02em;text-transform:uppercase;margin-bottom:8px;}
+.expect-desc{font-size:14px;color:rgba(248,248,246,.65);line-height:1.7;}
+
+/* ═══════════════════════════════════════════
+   PAGE: TRAINERS
+═══════════════════════════════════════════ */
+.trainers-page{background:var(--black);}
+
+/* Trainers grid intro */
+.trainers-intro{padding:80px 24px 64px;background:var(--black);position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+.trainers-intro::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 100% 80% at 50% 0%,rgba(182,255,57,.05) 0%,transparent 65%);}
+
+/* Trainer full cards */
+.trainer-cards{display:flex;flex-direction:column;gap:2px;padding-bottom:72px;}
+
+.trainer-card{background:var(--surface);overflow:hidden;}
+.trainer-photo-wrap{width:100%;aspect-ratio:3/4;overflow:hidden;background:var(--off-black);position:relative;}
+.trainer-photo-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;filter:brightness(.85);transition:transform .5s ease;}
+.trainer-card:hover .trainer-photo-wrap img{transform:scale(1.02);}
+
+/* Photo overlay label */
+.trainer-photo-label{position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(to bottom,transparent,rgba(10,10,10,.85));}
+.trainer-photo-class-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.class-badge{font-family:var(--fm);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border:1px solid var(--lime);color:var(--lime);border-radius:100px;}
+
+.trainer-info{padding:28px 24px 36px;}
+.trainer-name{font-family:var(--fd);font-weight:900;font-size:clamp(44px,13vw,68px);line-height:.9;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:4px;}
+.trainer-title{font-family:var(--fm);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:20px;}
+.trainer-bio{font-size:15px;line-height:1.75;color:rgba(248,248,246,.72);margin-bottom:24px;}
+
+/* Coaching style tags */
+.trainer-style{margin-bottom:20px;}
+.trainer-style-label{font-family:var(--fm);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.style-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.style-tag{font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:6px 14px;background:var(--surface2);color:var(--white);border-radius:2px;}
+
+/* Vibe row */
+.trainer-vibe{background:var(--black);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.vibe-icon{font-size:16px;flex-shrink:0;}
+.vibe-text{font-size:13px;color:rgba(248,248,246,.65);line-height:1.4;}
+.vibe-text strong{color:var(--lime);font-weight:600;}
+
+/* Trainer CTAs */
+.trainer-ctas{display:flex;flex-direction:column;gap:10px;}
+.btn-spotify{display:flex;align-items:center;justify-content:center;gap:10px;background:#1DB954;color:#fff;font-family:var(--fd);font-weight:800;font-size:18px;letter-spacing:.04em;text-transform:uppercase;padding:15px 24px;border-radius:2px;transition:background .2s;}
+.btn-spotify:hover{background:#17a347;}
+.btn-spotify svg{width:20px;height:20px;fill:#fff;flex-shrink:0;}
+
+/* ═══════════════════════════════════════════
+   SCROLL LOCK
+═══════════════════════════════════════════ */
+body.scroll-locked{overflow:hidden;}
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT -->
+<div class="announce" id="announce">
+  🔥 Intro Offer: First Class $10, Second Class Free — <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank">Claim Now →</a>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <span class="nav-logo" onclick="showPage('home')">DR<span class="sl">/</span>VE</span>
+  <div class="nav-right">
+    <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="nav-pill">Book</a>
+    <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="nav-pill ghost">Buy</a>
+    <button class="hamburger" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <div class="drawer-links">
+    <a href="#" onclick="showPage('home');closeDrawer();">Home</a>
+    <a href="#" onclick="showPage('classes');closeDrawer();">Workouts</a>
+    <a href="#" onclick="showPage('trainers');closeDrawer();">Team</a>
+    <a href="#" onclick="showPage('home');closeDrawer();scrollToSection('memberships');">Pricing</a>
+    <a href="#" onclick="showPage('home');closeDrawer();scrollToSection('faq');">FAQ</a>
+    <a href="#" onclick="showPage('home');closeDrawer();scrollToSection('contact');">Contact</a>
+  </div>
+  <div class="drawer-actions">
+    <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="nav-pill">Book a Class</a>
+    <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="nav-pill ghost">Intro Offer — $10</a>
+  </div>
+  <div class="drawer-foot">
+    <a href="https://www.instagram.com/drivetrainingclub" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/profile.php?id=61586036563419" target="_blank">Facebook</a>
+    <a href="https://apps.apple.com/us/app/drive/id6759316098" target="_blank">App</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PAGE: HOME
+════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-fallback"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-photo">
+      <img src="https://static.wixstatic.com/media/de3a5a_6133f022c797489e9052cb68260eac08~mv2.jpg/v1/fill/w_1200,h_1600,al_c,q_85/de3a5a_6133f022c797489e9052cb68260eac08~mv2.jpg" alt="DR/VE Training Club studio" loading="eager" onerror="this.closest('.hero-photo').style.display='none'">
+    </div>
+    <div class="hero-body">
+      <div class="hero-eyebrow">Norman, OK &nbsp;·&nbsp; Cycle × Train × Sculpt</div>
+      <h1 class="hero-h1">Driven<br>By <em>Com&shy;mu&shy;nity.</em></h1>
+      <p class="hero-desc">Norman's first and only studio to bring cycle, strength, and sculpt together under one roof. Train smarter. Move better. See real results.</p>
+      <div class="hero-ctas">
+        <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">Book a Class</a>
+        <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="btn-outline">Intro Offer — 2 Classes / $10</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="marquee-inner">
+      <span>Cycle</span><span class="sep">◆</span><span>Train</span><span class="sep">◆</span><span>Sculpt</span><span class="sep">◆</span><span>Norman, OK</span><span class="sep">◆</span><span>Community</span><span class="sep">◆</span><span>Results</span><span class="sep">◆</span><span>One Membership</span><span class="sep">◆</span>
+      <span>Cycle</span><span class="sep">◆</span><span>Train</span><span class="sep">◆</span><span>Sculpt</span><span class="sep">◆</span><span>Norman, OK</span><span class="sep">◆</span><span>Community</span><span class="sep">◆</span><span>Results</span><span class="sep">◆</span><span>One Membership</span><span class="sep">◆</span>
+    </div>
+  </div>
+
+  <!-- Philosophy -->
+  <section class="philosophy reveal">
+    <div class="section-label dark">Who We Are</div>
+    <h2 class="phil-headline">Fueled By<br>Movement.</h2>
+    <p class="phil-body">DR/VE is built on intention, performance, and community. We bring together cycle, strength, and sculpt under one roof — creating a smarter, more balanced way to train. Every class is designed to push limits without burning out, blending athletic performance with precision and control.</p>
+    <div class="pillars">
+      <div class="pillar"><div class="pillar-num">01</div><div class="pillar-title">Mind-Shifting Movement</div><p class="pillar-desc">Movement that elevates your energy and shifts your mindset — inside the studio and well after you leave.</p></div>
+      <div class="pillar"><div class="pillar-num">02</div><div class="pillar-title">Strength You Can Feel</div><p class="pillar-desc">From cardio to strength and sculpt, every class complements the next — supporting your body through a balanced training experience.</p></div>
+      <div class="pillar"><div class="pillar-num">03</div><div class="pillar-title">Powered By Community</div><p class="pillar-desc">We are stronger together. DR/VE is a space to show up consistently, train with purpose, and level up alongside people who push you.</p></div>
+    </div>
+  </section>
+
+  <!-- Classes -->
+  <section class="classes-section" id="home-classes">
+    <div class="section-header reveal">
+      <div class="section-label">What We Offer</div>
+      <h2 class="section-title">One Studio.<br>3 Ways To<br>Train.</h2>
+    </div>
+    <div class="class-tiles">
+      <div class="class-tile tile-cycle reveal">
+        <div class="tile-photo"><img src="https://static.wixstatic.com/media/7f64d7_73ec8ff6d6254c67a98884f194565df9~mv2.jpg/v1/fill/w_800,h_1000,al_c,q_85/rachdeckerphoto-4000-2_JPG.jpg" alt="Cycle" loading="lazy" onerror="this.style.display='none'"></div>
+        <div class="tile-body">
+          <div class="tile-tag">01 / 03</div>
+          <div class="tile-name">CYCLE</div>
+          <p class="tile-desc">Rhythm-based rides built for endurance, power, and energy. High intensity. Music-driven.</p>
+          <button class="tile-link" onclick="showPage('classes')">Learn More & Book →</button>
+        </div>
+      </div>
+      <div class="class-tile tile-train reveal">
+        <div class="tile-photo"><img src="https://static.wixstatic.com/media/7f64d7_ee51790ddc604759b31355f9ff084ae0~mv2.jpg/v1/fill/w_800,h_1000,al_c,q_85/rachdeckerphoto-3942-2_JPG.jpg" alt="Train" loading="lazy" onerror="this.style.display='none'"></div>
+        <div class="tile-body">
+          <div class="tile-tag">02 / 03</div>
+          <div class="tile-name">TRAIN</div>
+          <p class="tile-desc">Mat-based strength training focused on real results. Progressive. Intentional. Effective.</p>
+          <button class="tile-link" onclick="showPage('classes')">Learn More & Book →</button>
+        </div>
+      </div>
+      <div class="class-tile tile-sculpt reveal">
+        <div class="tile-photo"><img src="https://static.wixstatic.com/media/7f64d7_8d62c3b9d9fc41fd9f9596e4e658c036~mv2.jpg/v1/fill/w_800,h_1000,al_c,q_85/rachdeckerphoto-3910-2_JPG.jpg" alt="Sculpt" loading="lazy" onerror="this.style.display='none'"></div>
+        <div class="tile-body">
+          <div class="tile-tag">03 / 03</div>
+          <div class="tile-name">SCULPT</div>
+          <p class="tile-desc">Low-impact, high-control movement that builds strength and stability. Controlled and precise.</p>
+          <button class="tile-link" onclick="showPage('classes')">Learn More & Book →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro Offer -->
+  <div class="intro-block reveal">
+    <div class="intro-kicker">Special Intro Offer</div>
+    <div class="intro-headline">Your First<br>Class.<br>$10.</div>
+    <p class="intro-sub">Buy your first class for $10 — and get your second completely free. No commitment required.</p>
+    <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="btn-black">Claim Your Offer →</a>
+  </div>
+
+  <!-- Memberships -->
+  <section class="memberships reveal" id="memberships">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">One<br>Membership.<br>All Classes.</h2>
+    <div class="mem-toggle">
+      <button class="on" onclick="switchMem('monthly',this)">Monthly</button>
+      <button onclick="switchMem('packs',this)">Class Packs</button>
+      <button onclick="switchMem('dropin',this)">Drop-In</button>
+    </div>
+    <div class="mem-pane on" id="pane-monthly">
+      <div class="plan-stack">
+        <div class="plan-card hero-plan">
+          <div class="plan-flag">Best Value</div>
+          <div class="plan-name">Unlimited</div>
+          <div class="plan-price-row"><span class="plan-dollar">$</span><span class="plan-amount">145</span><span class="plan-freq">/mo</span></div>
+          <ul class="plan-features">
+            <li>Unlimited Cycle, Train &amp; Sculpt</li>
+            <li>Priority booking — 14 days ahead</li>
+            <li>1 guest pass per month</li>
+            <li>1 waived late cancel per month</li>
+            <li>Auto-renews monthly</li>
+          </ul>
+          <a href="https://app.clubready.com/JoinUs/15278/646533" target="_blank" class="plan-btn">Sign Up Now</a>
+        </div>
+        <div class="plan-card">
+          <div class="plan-name">8 Classes / Month</div>
+          <div class="plan-price-row"><span class="plan-dollar">$</span><span class="plan-amount">99</span><span class="plan-freq">/mo</span></div>
+          <ul class="plan-features"><li>8 classes per month</li><li>All class formats</li><li>Credits expire after 5 weeks</li><li>Freeze anytime</li></ul>
+          <a href="https://app.clubready.com/JoinUs/15278/646535" target="_blank" class="plan-btn ghost">Sign Up Now</a>
+        </div>
+        <div class="plan-card">
+          <div class="plan-name">4 Classes / Month</div>
+          <div class="plan-price-row"><span class="plan-dollar">$</span><span class="plan-amount">65</span><span class="plan-freq">/mo</span></div>
+          <ul class="plan-features"><li>4 classes per month</li><li>All class formats</li><li>Credits expire after 5 weeks</li><li>Freeze anytime</li></ul>
+          <a href="https://app.clubready.com/JoinUs/15278/646534" target="_blank" class="plan-btn ghost">Sign Up Now</a>
+        </div>
+        <div class="plan-card">
+          <div class="plan-name">Student, Educator &amp; Military</div>
+          <div class="plan-price-row" style="align-items:center;padding-top:12px;"><span style="font-family:var(--fd);font-weight:900;font-size:32px;color:var(--lime);letter-spacing:-.01em;">Discounted</span></div>
+          <ul class="plan-features"><li>Unlimited classes / month</li><li>Valid ID required at studio</li><li>DM or text us for pricing</li></ul>
+          <a href="tel:405-593-3001" class="plan-btn ghost">Call or Text Us</a>
+        </div>
+      </div>
+    </div>
+    <div class="mem-pane" id="pane-packs">
+      <p class="dropin-intro">Buy a pack and use it on any class format. No monthly commitment.</p>
+      <div class="dropin-grid">
+        <a href="https://app.clubready.com/JoinUs/15278/646536" target="_blank" class="dropin-card"><div class="dropin-qty">5</div><div class="dropin-price">$105</div><div class="dropin-label">Class Pack</div><div class="dropin-expiry">Expires 1 month</div></a>
+        <a href="https://app.clubready.com/JoinUs/15278/646537" target="_blank" class="dropin-card"><div class="dropin-qty">10</div><div class="dropin-price">$189</div><div class="dropin-label">Class Pack</div><div class="dropin-expiry">Expires 3 months</div></a>
+        <a href="https://app.clubready.com/JoinUs/15278/646538" target="_blank" class="dropin-card" style="grid-column:1/-1;"><div class="dropin-qty">20</div><div class="dropin-price">$360</div><div class="dropin-label">Class Pack</div><div class="dropin-expiry">Expires 1 year</div></a>
+      </div>
+    </div>
+    <div class="mem-pane" id="pane-dropin">
+      <p class="dropin-intro">Try us once. No strings attached.</p>
+      <div class="dropin-grid">
+        <a href="https://app.clubready.com/JoinUs/15278/646542" target="_blank" class="dropin-card" style="grid-column:1/-1;border:1px solid var(--lime);"><div class="dropin-qty" style="color:var(--lime);">$25</div><div class="dropin-label" style="font-size:12px;margin-top:4px;">Single Drop-In · Any Class</div><div class="dropin-expiry">Expires 2 weeks from purchase</div></a>
+      </div>
+      <div style="margin-top:24px;"><a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="btn-lime">Better Deal: 2 Classes for $10 →</a></div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials reveal">
+    <div class="section-label">Community</div>
+    <h2 class="section-title">What Our<br>Members Say.</h2>
+    <div class="testi-scroll">
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-body">"I was intimidated to try a boutique studio, but the DR/VE team made me feel so welcome from day one. The energy in that room is unlike anything I've experienced."</p><div class="testi-name">Member · Norman, OK</div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-body">"Switching between Cycle, Train, and Sculpt on one membership is a game changer. My body never plateaus — every week feels different and I keep seeing results."</p><div class="testi-name">Member · Norman, OK</div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-body">"Best instructors I've had. They push you, they know your name, and they genuinely care about your progress. Norman needed this studio."</p><div class="testi-name">Member · Norman, OK</div></div>
+    </div>
+  </section>
+
+  <!-- Team Preview -->
+  <section class="team-preview reveal">
+    <div class="section-label">The People</div>
+    <h2 class="section-title">Meet The<br>DTC Team.</h2>
+    <div class="team-grid-home" style="margin-top:48px;">
+      <div class="team-card-home"><img src="https://static.wixstatic.com/media/7f64d7_fa0a8a15f2bb499e96c7e0fb8b15ad0a~mv2.jpg/v1/fill/w_600,h_800,al_t,q_85/DSC00469%205_JPG.jpg" alt="Kylie Cowling" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex';"><div class="team-placeholder-home" style="display:none;">K</div><div class="team-overlay"><div class="team-card-name">Kylie Cowling</div><div class="team-card-role">Founder + Coach</div></div></div>
+      <div class="team-card-home"><img src="https://static.wixstatic.com/media/7f64d7_445fde44d8b3453680d213d7c4ad1dad~mv2.jpg/v1/fill/w_600,h_800,al_t,q_85/DSC01284%203_JPG.jpg" alt="Aubrey Cohlmia" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex';"><div class="team-placeholder-home" style="display:none;">A</div><div class="team-overlay"><div class="team-card-name">Aubrey Cohlmia</div><div class="team-card-role">Head Trainer</div></div></div>
+      <div class="team-card-home"><img src="https://static.wixstatic.com/media/7f64d7_931c1973d8d4434587c6f2cef8b6a0ab~mv2.jpg/v1/fill/w_600,h_800,al_t,q_85/Facetune_07-02-2026-22-41-20%202_JPG.jpg" alt="Lana Johnson" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex';"><div class="team-placeholder-home" style="display:none;">L</div><div class="team-overlay"><div class="team-card-name">Lana Johnson</div><div class="team-card-role">Coach · Cycle</div></div></div>
+      <div class="team-card-home" style="background:#111;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:24px;text-align:center;cursor:pointer;" onclick="showPage('trainers')">
+        <div style="font-family:var(--fd);font-weight:900;font-size:52px;line-height:.9;color:rgba(255,255,255,.1);letter-spacing:-.02em;text-transform:uppercase;">DR<span style="color:var(--lime);">/</span>VE</div>
+        <div style="font-family:var(--fm);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--lime);">Meet All 6 Trainers →</div>
+      </div>
+    </div>
+    <div style="margin-top:32px;"><button onclick="showPage('trainers')" class="btn-outline">Meet The Full Team</button></div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="reveal" id="faq" style="background:var(--black);padding:72px 24px;">
+    <div class="section-label">New to DR/VE?</div>
+    <h2 class="section-title">Start Here.</h2>
+    <div class="faq-list" style="margin-top:48px;">
+      <div class="faq-item"><button class="faq-trigger" onclick="toggleFaq(this)">Do I need experience to take class?<span class="faq-icon">+</span></button><div class="faq-answer">Not at all. Every class is designed to be approachable while still challenging. Our coaches offer guidance and modifications throughout class.</div></div>
+      <div class="faq-item"><button class="faq-trigger" onclick="toggleFaq(this)">How do I book my first class?<span class="faq-icon">+</span></button><div class="faq-answer">Classes can be booked through our website or the DR/VE app. We recommend booking ahead as some times fill early. Trouble booking? Call <a href="tel:405-593-3001">405-593-3001</a> or email <a href="mailto:info@drivetrainingclub.com">info@drivetrainingclub.com</a>.</div></div>
+      <div class="faq-item"><button class="faq-trigger" onclick="toggleFaq(this)">What shoes do I need?<span class="faq-icon">+</span></button><div class="faq-answer">CYCLE requires cycling shoes with SPD or Delta clips — complimentary shoe rentals included for members and first-timers. TRAIN can be done in tennis shoes or socks. SCULPT is typically socks.</div></div>
+      <div class="faq-item"><button class="faq-trigger" onclick="toggleFaq(this)">What should I bring?<span class="faq-icon">+</span></button><div class="faq-answer">Bring water, grip socks or tennis shoes depending on format, and anything you'd normally bring to a workout. Towels are complimentary. Water + energy drinks are available for purchase in studio.</div></div>
+      <div class="faq-item"><button class="faq-trigger" onclick="toggleFaq(this)">How early should I arrive?<span class="faq-icon">+</span></button><div class="faq-answer">We recommend arriving 10–15 minutes before your first class so our team can check you in, show you the space, and get you comfortable before class starts.</div></div>
+      <div class="faq-item"><button class="faq-trigger" onclick="toggleFaq(this)">Which class should I start with?<span class="faq-icon">+</span></button><div class="faq-answer">All formats are beginner-friendly. Whether you're drawn to cardio, strength, or low-impact movement, our team will guide you to the best starting point.</div></div>
+    </div>
+  </section>
+
+  <!-- Amenities -->
+  <section class="amenities reveal">
+    <div class="section-label dark">The Space</div>
+    <h2 class="section-title" style="color:var(--black);">Our Studio.</h2>
+    <div class="amenity-list">
+      <div class="amenity-item"><span class="amenity-icon">🏋️</span><span class="amenity-text">New Equipment</span></div>
+      <div class="amenity-item"><span class="amenity-icon">🔒</span><span class="amenity-text">Locker Rooms</span></div>
+      <div class="amenity-item"><span class="amenity-icon">☕</span><span class="amenity-text">Coffee &amp; Snacks</span></div>
+      <div class="amenity-item"><span class="amenity-icon">🥤</span><span class="amenity-text">Juice Bar</span></div>
+      <div class="amenity-item"><span class="amenity-icon">🚿</span><span class="amenity-text">Clean Showers</span></div>
+      <div class="amenity-item"><span class="amenity-icon">🧖</span><span class="amenity-text">Sauna &amp; Steam</span></div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact reveal" id="contact">
+    <div class="section-label">Find Us</div>
+    <h2 class="section-title">Come In.</h2>
+    <div class="contact-details">
+      <div class="contact-row"><span class="contact-key">Address</span><span class="contact-val">1942 24th Ave NW<br>Suite H-4, Norman OK 73069</span></div>
+      <div class="contact-row"><span class="contact-key">Phone</span><span class="contact-val"><a href="tel:405-593-3001">405-593-3001</a></span></div>
+      <div class="contact-row"><span class="contact-key">Email</span><span class="contact-val"><a href="mailto:info@drivetrainingclub.com">info@drivetrainingclub.com</a></span></div>
+      <div class="contact-row"><span class="contact-key">App</span><span class="contact-val"><a href="https://apps.apple.com/us/app/drive/id6759316098" target="_blank">Download DR/VE App →</a></span></div>
+    </div>
+    <div class="contact-btns">
+      <a href="tel:405-593-3001" class="btn-lime">Call Now</a>
+      <a href="mailto:info@drivetrainingclub.com" class="btn-outline">Email Us</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="foot-logo">DR<span class="sl">/</span>VE</div>
+    <div class="foot-tagline">Cycle × Train × Sculpt · Norman, OK</div>
+    <div class="foot-nav">
+      <div class="foot-col">
+        <div class="foot-col-title">Studio</div>
+        <a href="#" onclick="showPage('classes')">Class Types</a>
+        <a href="https://drive.myperformanceiq.com/bookings" target="_blank">Book a Class</a>
+        <a href="#" onclick="showPage('trainers')">Meet the Team</a>
+        <a href="#" onclick="scrollToSection('faq')">FAQ</a>
+        <a href="https://www.drivetrainingclub.com/ambassadors" target="_blank">Ambassadors</a>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-title">More</div>
+        <a href="https://apps.apple.com/us/app/drive/id6759316098" target="_blank">Download App</a>
+        <a href="https://www.instagram.com/drivetrainingclub" target="_blank">Instagram</a>
+        <a href="https://www.facebook.com/profile.php?id=61586036563419" target="_blank">Facebook</a>
+        <a href="https://www.drivetrainingclub.com/blog/categories/cycle" target="_blank">Blog</a>
+        <a href="https://www.drivetrainingclub.com/category/all-products" target="_blank">Shop</a>
+      </div>
+    </div>
+    <div class="foot-social">
+      <a href="https://www.instagram.com/drivetrainingclub" target="_blank" class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      <a href="https://www.facebook.com/profile.php?id=61586036563419" target="_blank" class="social-icon" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+    </div>
+    <div class="foot-legal">
+      <a href="https://www.drivetrainingclub.com/privacy-policy" target="_blank">Privacy Policy</a>
+      <a href="https://www.drivetrainingclub.com/terms-conditions" target="_blank">Terms</a>
+      <a href="https://www.drivetrainingclub.com/refund-policy" target="_blank">Refund Policy</a>
+    </div>
+    <div class="foot-copy">© 2026 DR/VE Training Club · Norman, Oklahoma</div>
+  </footer>
+</div><!-- end page-home -->
+
+
+<!-- ════════════════════════════════════════
+     PAGE: CLASS TYPES
+════════════════════════════════════════ -->
+<div class="page" id="page-classes">
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="page-hero-label">Our Workouts</div>
+    <h1 class="page-hero-title">The DR<span style="color:var(--lime);">/</span>VE<br>Difference.</h1>
+    <p class="page-hero-sub">One membership. Three formats. Each designed to complement the others — building endurance, strength, and control all at once.</p>
+  </div>
+
+  <div class="classes-page">
+
+    <!-- ── CYCLE ── -->
+    <div class="format-block">
+      <div class="format-photo format-fallback-cycle">
+        <img src="https://static.wixstatic.com/media/de3a5a_db4625ea88834d24ae422f3da21d080a~mv2.jpg/v1/fill/w_1200,h_675,al_c,q_85/rachdeckerphoto-4032_edited.jpg" alt="Cycle at DR/VE" loading="lazy" onerror="this.style.display='none'">
+      </div>
+      <div class="format-body">
+        <div class="format-number">01 / 03</div>
+        <div class="format-name">CYCLE</div>
+        <div class="format-tagline">Rhythm-Based Indoor Cycling</div>
+        <p class="format-desc">DR/VE CYCLE is built around rhythm. Expect curated playlists, immersive lighting, and beat-driven resistance designed to challenge endurance, build power, and push performance. This full-body cycling experience blends speed, resistance, and intentional movement to challenge both physical and mental limits.</p>
+
+        <div class="sub-formats">
+          <div class="sub-format">
+            <div class="sub-format-name">/CYCLE45:CLASSIC</div>
+            <p class="sub-format-desc">A rhythm-based ride designed to build cardiovascular endurance, power, and stamina. Structured intervals leave you stronger and more resilient every ride. High-energy atmosphere with a curated playlist from start to finish.</p>
+          </div>
+          <div class="sub-format">
+            <div class="sub-format-name">/CYCLE45:CLIMB</div>
+            <p class="sub-format-desc">All the energy of classic CYCLE, with heavier hills, slower resistance pushes, and a stronger focus on power, endurance, and control. Slower tempos and heavier loads target the legs and glutes while building mental grit.</p>
+          </div>
+          <div class="sub-format">
+            <div class="sub-format-name">/CYCLE × TRAIN</div>
+            <p class="sub-format-desc">A hybrid class that combines high-intensity cycling with off-the-bike strength training for a full-spectrum workout. Builds cardiovascular endurance, power, and muscular strength in a single session — maximum efficiency without sacrificing performance.</p>
+          </div>
+        </div>
+
+        <div class="format-stats">
+          <div class="format-stat"><div class="stat-val">45<span style="font-size:18px;">min</span></div><div class="stat-key">Class Length</div></div>
+          <div class="format-stat"><div class="stat-val">Low</div><div class="stat-key">Impact</div></div>
+          <div class="format-stat"><div class="stat-val">High</div><div class="stat-key">Intensity</div></div>
+        </div>
+
+        <div style="background:var(--surface);padding:18px 20px;margin-bottom:32px;border-left:3px solid var(--lime);">
+          <div style="font-family:var(--fm);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;">Shoes</div>
+          <p style="font-size:13px;color:rgba(248,248,246,.65);line-height:1.6;">CYCLE requires cycling shoes with SPD or Delta clips. <strong style="color:var(--white);">Complimentary shoe rentals</strong> are included for members and first-time guests — no need to bring your own.</p>
+        </div>
+
+        <div class="format-ctas">
+          <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">See Schedule &amp; Book</a>
+          <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="btn-outline">Try It — $10 Intro Offer</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TRAIN ── -->
+    <div class="format-block">
+      <div class="format-photo format-fallback-train">
+        <img src="https://static.wixstatic.com/media/de3a5a_119da5e281b845beaece5c76606a4bf5~mv2.jpg/v1/fill/w_1200,h_675,al_c,q_85/rachdeckerphoto-5831.jpg" alt="Train at DR/VE" loading="lazy" onerror="this.style.display='none'">
+      </div>
+      <div class="format-body">
+        <div class="format-number">02 / 03</div>
+        <div class="format-name">TRAIN</div>
+        <div class="format-tagline">Progressive Strength Training</div>
+        <p class="format-desc">This strength-focused format combines structured strength training with intentional conditioning for a total-body, athletic workout. Expect heavier weights, controlled pacing, and progressive programming designed to build power, endurance, and performance. Using dumbbells, barbells, and bodyweight — Train builds muscle, improves stability, and increases overall strength to support long-term results.</p>
+
+        <div class="sub-formats">
+          <div class="sub-format">
+            <div class="sub-format-name">/TRAIN45</div>
+            <p class="sub-format-desc">A total-body strength class centered on progressive overload, functional movement, and athletic performance. Using dumbbells, barbells, and bodyweight — this class builds muscle, improves stability, and increases overall strength. Designed to support long-term results and smarter training.</p>
+          </div>
+        </div>
+
+        <div class="format-stats">
+          <div class="format-stat"><div class="stat-val">45<span style="font-size:18px;">min</span></div><div class="stat-key">Class Length</div></div>
+          <div class="format-stat"><div class="stat-val">Med</div><div class="stat-key">Impact</div></div>
+          <div class="format-stat"><div class="stat-val">High</div><div class="stat-key">Intensity</div></div>
+        </div>
+
+        <div style="background:var(--surface);padding:18px 20px;margin-bottom:32px;border-left:3px solid var(--lime);">
+          <div style="font-family:var(--fm);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;">Shoes</div>
+          <p style="font-size:13px;color:rgba(248,248,246,.65);line-height:1.6;">TRAIN can be taken in <strong style="color:var(--white);">tennis shoes or socks</strong>. No special footwear required.</p>
+        </div>
+
+        <div class="format-ctas">
+          <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">See Schedule &amp; Book</a>
+          <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="btn-outline">Try It — $10 Intro Offer</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCULPT ── -->
+    <div class="format-block">
+      <div class="format-photo format-fallback-sculpt">
+        <img src="https://static.wixstatic.com/media/de3a5a_09816a2b896540eeb62d7cf1c48020f4~mv2.jpg/v1/fill/w_1200,h_675,al_c,q_85/rachdeckerphoto-3957.jpg" alt="Sculpt at DR/VE" loading="lazy" onerror="this.style.display='none'">
+      </div>
+      <div class="format-body">
+        <div class="format-number">03 / 03</div>
+        <div class="format-name">SCULPT</div>
+        <div class="format-tagline">Low-Impact, High-Control Movement</div>
+        <p class="format-desc">A rhythm-based sculpt experience focused on control and stability. Low-impact and high-intention — SCULPT classes improve mobility and create long, lean definition while building serious muscular endurance. Each format is designed to complement your higher-intensity training days.</p>
+
+        <div class="sub-formats">
+          <div class="sub-format">
+            <div class="sub-format-name">/SCULPT45:TONE</div>
+            <p class="sub-format-desc">A targeted toning class focused on high-repetition, low-impact movements that lengthen and define muscle. Using lighter weights and bodyweight resistance, Sculpt Tone creates a deep burn while improving posture and muscle definition. Expect continuous, beat-driven sequencing that challenges stability, mobility, and muscular endurance.</p>
+          </div>
+          <div class="sub-format">
+            <div class="sub-format-name">/SCULPT45:FLOW</div>
+            <p class="sub-format-desc">A slower, continuous movement format built to restore, strengthen, and improve mobility through intentional flow, control, and low-impact recovery work. A low-impact class that emphasizes mobility, core strength, and controlled movement. Perfect for active recovery days or pairing with higher-intensity training.</p>
+          </div>
+        </div>
+
+        <div class="format-stats">
+          <div class="format-stat"><div class="stat-val">45<span style="font-size:18px;">min</span></div><div class="stat-key">Class Length</div></div>
+          <div class="format-stat"><div class="stat-val">Low</div><div class="stat-key">Impact</div></div>
+          <div class="format-stat"><div class="stat-val">Med</div><div class="stat-key">Intensity</div></div>
+        </div>
+
+        <div style="background:var(--surface);padding:18px 20px;margin-bottom:32px;border-left:3px solid var(--lime);">
+          <div style="font-family:var(--fm);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:8px;">Shoes</div>
+          <p style="font-size:13px;color:rgba(248,248,246,.65);line-height:1.6;">SCULPT is typically taken in <strong style="color:var(--white);">grip socks</strong>. Bare feet or socks are fine for most formats.</p>
+        </div>
+
+        <div class="format-ctas">
+          <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">See Schedule &amp; Book</a>
+          <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="btn-outline">Try It — $10 Intro Offer</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end class formats -->
+
+  <!-- What to expect -->
+  <section class="what-expect">
+    <div class="section-label">First Timer?</div>
+    <h2 class="section-title">What To<br>Expect.</h2>
+    <div class="expect-grid">
+      <div class="expect-item"><div class="expect-icon">⏰</div><div class="expect-title">Arrive Early</div><p class="expect-desc">Come 10–15 minutes before your first class so we can check you in, show you around, and get you set up before the music starts.</p></div>
+      <div class="expect-item"><div class="expect-icon">👟</div><div class="expect-title">Bring The Right Shoes</div><p class="expect-desc">Cycle shoes included free. Bring tennis shoes for Train. Socks for Sculpt. Our team will help you figure it out at the door.</p></div>
+      <div class="expect-item"><div class="expect-icon">💧</div><div class="expect-title">Bring Water</div><p class="expect-desc">Bring a water bottle. Towels are complimentary. Water and energy drinks are available for purchase if you forget yours.</p></div>
+      <div class="expect-item"><div class="expect-icon">🎵</div><div class="expect-title">Music-Driven Classes</div><p class="expect-desc">Every DR/VE class is set to a curated playlist. The music drives the movement — you'll feel it from the first beat.</p></div>
+      <div class="expect-item"><div class="expect-icon">🤝</div><div class="expect-title">Coaches Who Know You</div><p class="expect-desc">Our coaches learn your name and your goals. Expect real cues, real energy, and modifications when you need them.</p></div>
+      <div class="expect-item"><div class="expect-icon">🔄</div><div class="expect-title">Mix &amp; Match Classes</div><p class="expect-desc">One membership covers every format. Our cross-training approach means you can cycle Monday, sculpt Wednesday, and train Friday — all on the same plan.</p></div>
+    </div>
+  </section>
+
+  <!-- Intro offer block -->
+  <div class="intro-block">
+    <div class="intro-kicker">Ready To Start?</div>
+    <div class="intro-headline">First Class.<br>$10.</div>
+    <p class="intro-sub">Buy your first class for $10 and get your second completely free. No commitment required.</p>
+    <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="btn-black">Claim Your Offer →</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="foot-logo">DR<span class="sl">/</span>VE</div>
+    <div class="foot-tagline">Cycle × Train × Sculpt · Norman, OK</div>
+    <div class="foot-nav">
+      <div class="foot-col"><div class="foot-col-title">Studio</div><a href="#" onclick="showPage('classes')">Class Types</a><a href="https://drive.myperformanceiq.com/bookings" target="_blank">Book a Class</a><a href="#" onclick="showPage('trainers')">Meet the Team</a><a href="#" onclick="showPage('home');scrollToSection('faq')">FAQ</a></div>
+      <div class="foot-col"><div class="foot-col-title">More</div><a href="https://apps.apple.com/us/app/drive/id6759316098" target="_blank">Download App</a><a href="https://www.instagram.com/drivetrainingclub" target="_blank">Instagram</a><a href="https://www.facebook.com/profile.php?id=61586036563419" target="_blank">Facebook</a></div>
+    </div>
+    <div class="foot-legal"><a href="https://www.drivetrainingclub.com/privacy-policy" target="_blank">Privacy Policy</a><a href="https://www.drivetrainingclub.com/terms-conditions" target="_blank">Terms</a><a href="https://www.drivetrainingclub.com/refund-policy" target="_blank">Refund Policy</a></div>
+    <div class="foot-copy">© 2026 DR/VE Training Club · Norman, Oklahoma</div>
+  </footer>
+
+</div><!-- end page-classes -->
+
+
+<!-- ════════════════════════════════════════
+     PAGE: TRAINERS
+════════════════════════════════════════ -->
+<div class="page" id="page-trainers">
+
+  <div class="trainers-intro">
+    <div class="page-hero-label">The Coaches</div>
+    <h1 class="page-hero-title">The DR<span style="color:var(--lime);">/</span>VE<br>Team.</h1>
+    <p class="page-hero-sub">Our team brings energy, experience, and intentional coaching to every class — creating a supportive environment built to help you move well, train with purpose, and feel confident from day one.</p>
+  </div>
+
+  <div class="trainer-cards">
+
+    <!-- KYLIE COWLING -->
+    <div class="trainer-card">
+      <div class="trainer-photo-wrap">
+        <img src="https://static.wixstatic.com/media/7f64d7_fa0a8a15f2bb499e96c7e0fb8b15ad0a~mv2.jpg/v1/fill/w_800,h_1000,al_t,q_85/DSC00469%205_JPG.jpg" alt="Kylie Cowling" loading="lazy" onerror="this.style.display='none'">
+        <div class="trainer-photo-label">
+          <div style="font-family:var(--fd);font-weight:900;font-size:48px;line-height:.9;letter-spacing:-.02em;text-transform:uppercase;">Kylie Cowling</div>
+          <div class="trainer-photo-class-tags">
+            <span class="class-badge">Cycle</span>
+            <span class="class-badge">Train</span>
+          </div>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">Kylie<br>Cowling</div>
+        <div class="trainer-title">Founder + Coach · Cycle · Train</div>
+        <p class="trainer-bio">With 8 years of coaching experience and NASM certification, Kylie brings a high-energy, intentional approach to every class. As the founder of Drive Training Club, her style is built on structure, consistency, and creating a space where you can show up as you are — and still be pushed to go further, together. Her classes are designed to create moments that stay with you beyond the workout: steady, challenging, and fully engaging from start to finish, set to a mix of hip-hop favorites and an eclectic playlist that keeps you moving.</p>
+        <div class="trainer-style">
+          <div class="trainer-style-label">Coaching Style</div>
+          <div class="style-tags"><span class="style-tag">High-Energy</span><span class="style-tag">Intentional</span><span class="style-tag">Strength-Focused</span></div>
+        </div>
+        <div class="trainer-vibe">
+          <span class="vibe-icon">🎵</span>
+          <span class="vibe-text"><strong>Go-To Vibe —</strong> Hip-hop + high-energy remixes</span>
+        </div>
+        <div class="trainer-ctas">
+          <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">Book Kylie's Class</a>
+          <a href="https://open.spotify.com/user/22yqdbunlz3mgr3xgaxkfumfi" target="_blank" class="btn-spotify"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Spotify Playlist</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUBREY COHLMIA -->
+    <div class="trainer-card">
+      <div class="trainer-photo-wrap">
+        <img src="https://static.wixstatic.com/media/7f64d7_445fde44d8b3453680d213d7c4ad1dad~mv2.jpg/v1/fill/w_800,h_1000,al_t,q_85/DSC01284%203_JPG.jpg" alt="Aubrey Cohlmia" loading="lazy" onerror="this.style.display='none'">
+        <div class="trainer-photo-label">
+          <div style="font-family:var(--fd);font-weight:900;font-size:48px;line-height:.9;letter-spacing:-.02em;text-transform:uppercase;">Aubrey Cohlmia</div>
+          <div class="trainer-photo-class-tags"><span class="class-badge">Cycle</span><span class="class-badge">Sculpt</span></div>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">Aubrey<br>Cohlmia</div>
+        <div class="trainer-title">Head Trainer · Cycle · Sculpt</div>
+        <p class="trainer-bio">With 8 years of experience and NASM certification, Aubrey brings a grounded, focused presence to every class. Her approach is rooted in smart programming, controlled movement, and creating workouts that challenge you in the right ways. Her classes are intentional and steady, built to push you past your comfort zone while keeping you connected to the work from start to finish. Expect strong pushes, a little grit, and a class that delivers every time.</p>
+        <div class="trainer-style">
+          <div class="trainer-style-label">Coaching Style</div>
+          <div class="style-tags"><span class="style-tag">Grounded</span><span class="style-tag">Intentional</span><span class="style-tag">Strength-Focused</span></div>
+        </div>
+        <div class="trainer-vibe">
+          <span class="vibe-icon">🎵</span>
+          <span class="vibe-text"><strong>Go-To Vibe —</strong> A little grit + controlled movement</span>
+        </div>
+        <div class="trainer-ctas">
+          <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">Book Aubrey's Class</a>
+          <a href="https://open.spotify.com/user/aubhad" target="_blank" class="btn-spotify"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Spotify Playlist</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LANA JOHNSON -->
+    <div class="trainer-card">
+      <div class="trainer-photo-wrap">
+        <img src="https://static.wixstatic.com/media/7f64d7_931c1973d8d4434587c6f2cef8b6a0ab~mv2.jpg/v1/fill/w_800,h_1000,al_t,q_85/Facetune_07-02-2026-22-41-20%202_JPG.jpg" alt="Lana Johnson" loading="lazy" onerror="this.style.display='none'">
+        <div class="trainer-photo-label">
+          <div style="font-family:var(--fd);font-weight:900;font-size:48px;line-height:.9;letter-spacing:-.02em;text-transform:uppercase;">Lana Johnson</div>
+          <div class="trainer-photo-class-tags"><span class="class-badge">Cycle</span></div>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">Lana<br>Johnson</div>
+        <div class="trainer-title">Marketing Manager · Cycle</div>
+        <p class="trainer-bio">Lana brings a focused, intentional approach to every class, with a strong connection to music and how it drives movement. Her style is steady, structured, and built to keep you fully engaged from start to finish. Her classes are rooted in purposeful movement, strong flow, and creating an experience that feels immersive without overcomplicating it. Expect intentional sequencing, steady energy, and a workout that challenges you while keeping you connected to the rhythm.</p>
+        <div class="trainer-style">
+          <div class="trainer-style-label">Coaching Style</div>
+          <div class="style-tags"><span class="style-tag">Focused</span><span class="style-tag">Intentional</span><span class="style-tag">Rhythm-Driven</span></div>
+        </div>
+        <div class="trainer-vibe">
+          <span class="vibe-icon">🎵</span>
+          <span class="vibe-text"><strong>Go-To Vibe —</strong> Strong flow + immersive energy</span>
+        </div>
+        <div class="trainer-ctas">
+          <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">Book Lana's Class</a>
+          <a href="https://open.spotify.com/user/31canybvl4rdwnx3fbaaipdfpg2m" target="_blank" class="btn-spotify"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Spotify Playlist</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RENEE WILLIAMS -->
+    <div class="trainer-card">
+      <div class="trainer-photo-wrap">
+        <img src="https://static.wixstatic.com/media/7f64d7_3ae855f9d44543ed99120e98c74c53a9~mv2.jpg/v1/fill/w_800,h_1000,al_t,q_85/DSC00859%203_JPG.jpg" alt="Renee Williams" loading="lazy" onerror="this.style.display='none'">
+        <div class="trainer-photo-label">
+          <div style="font-family:var(--fd);font-weight:900;font-size:48px;line-height:.9;letter-spacing:-.02em;text-transform:uppercase;">Renee Williams</div>
+          <div class="trainer-photo-class-tags"><span class="class-badge">Cycle</span><span class="class-badge">Train</span><span class="class-badge">Sculpt</span></div>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">Renee<br>Williams</div>
+        <div class="trainer-title">Coach · Cycle · Train · Sculpt</div>
+        <p class="trainer-bio">With over 20 years of coaching experience and NASM certification, Renee brings a supportive, high-energy presence to every class. Her approach is rooted in consistency, connection, and creating workouts that feel both effective and approachable. She's passionate about building a strong sense of community and creating a space where people feel welcomed, seen, and part of something bigger. Expect steady energy, purposeful movement, and a full-body workout that feels just as good as it works.</p>
+        <div class="trainer-style">
+          <div class="trainer-style-label">Coaching Style</div>
+          <div class="style-tags"><span class="style-tag">Supportive</span><span class="style-tag">High-Energy</span><span class="style-tag">Community-Focused</span></div>
+        </div>
+        <div class="trainer-vibe">
+          <span class="vibe-icon">🎵</span>
+          <span class="vibe-text"><strong>Go-To Vibe —</strong> Steady energy + full-body work</span>
+        </div>
+        <div class="trainer-ctas">
+          <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">Book Renee's Class</a>
+          <a href="https://open.spotify.com/user/129518714" target="_blank" class="btn-spotify"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Spotify Playlist</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- LATHAN JEFFRIES -->
+    <div class="trainer-card">
+      <div class="trainer-photo-wrap">
+        <img src="https://static.wixstatic.com/media/7f64d7_d5390f0d9ca043e39d6e7f094fc809f2~mv2.jpg/v1/fill/w_800,h_1000,al_t,q_85/DSC00405_JPG.jpg" alt="Lathan Jeffries" loading="lazy" onerror="this.style.display='none'">
+        <div class="trainer-photo-label">
+          <div style="font-family:var(--fd);font-weight:900;font-size:48px;line-height:.9;letter-spacing:-.02em;text-transform:uppercase;">Lathan Jeffries</div>
+          <div class="trainer-photo-class-tags"><span class="class-badge">Cycle</span><span class="class-badge">Train</span></div>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">Lathan<br>Jeffries</div>
+        <div class="trainer-title">Coach · Cycle · Train</div>
+        <p class="trainer-bio">Lathan brings an unapologetically high-energy presence to every class, blending movement, music, and performance in a way that's hard to ignore. With a background in theater, he knows how to command a room and create an experience that keeps energy high from start to finish. His classes are bold, immersive, and built to keep you moving. Expect loud music, nonstop energy, and a workout that feels like the perfect mix of challenge, rhythm, and fun.</p>
+        <div class="trainer-style">
+          <div class="trainer-style-label">Coaching Style</div>
+          <div class="style-tags"><span class="style-tag">High-Energy</span><span class="style-tag">Expressive</span><span class="style-tag">Performance-Driven</span></div>
+        </div>
+        <div class="trainer-vibe">
+          <span class="vibe-icon">🎵</span>
+          <span class="vibe-text"><strong>Go-To Vibe —</strong> Loud music + nonstop movement</span>
+        </div>
+        <div class="trainer-ctas">
+          <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">Book Lathan's Class</a>
+          <a href="https://open.spotify.com/user/lathan.jeffries" target="_blank" class="btn-spotify"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Spotify Playlist</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARCUS BUTTWEILER -->
+    <div class="trainer-card">
+      <div class="trainer-photo-wrap">
+        <img src="https://static.wixstatic.com/media/7f64d7_3201945767344dd497ae33ba2bae66cc~mv2.jpg/v1/fill/w_800,h_1000,al_t,q_85/DSC00183_JPG.jpg" alt="Marcus Buttweiler" loading="lazy" onerror="this.style.display='none'">
+        <div class="trainer-photo-label">
+          <div style="font-family:var(--fd);font-weight:900;font-size:48px;line-height:.9;letter-spacing:-.02em;text-transform:uppercase;">Marcus Buttweiler</div>
+          <div class="trainer-photo-class-tags"><span class="class-badge">Cycle</span><span class="class-badge">Train</span><span class="class-badge">Sculpt</span></div>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">Marcus<br>Buttweiler</div>
+        <div class="trainer-title">Coach · Cycle · Train · Sculpt</div>
+        <p class="trainer-bio">Marcus brings an energetic, expressive approach to every class, blending athletic movement with a style that keeps things engaging from start to finish. His coaching is rooted in creating workouts that feel challenging, intentional, and never one-dimensional. With a strong connection to rhythm and movement, his classes are built to keep you locked in. Expect steady burn, strong pace, and just enough personality to make every workout feel both challenging and fun.</p>
+        <div class="trainer-style">
+          <div class="trainer-style-label">Coaching Style</div>
+          <div class="style-tags"><span class="style-tag">Energetic</span><span class="style-tag">Expressive</span><span class="style-tag">Athletic</span></div>
+        </div>
+        <div class="trainer-vibe">
+          <span class="vibe-icon">🎵</span>
+          <span class="vibe-text"><strong>Go-To Vibe —</strong> Strong pace + steady burn</span>
+        </div>
+        <div class="trainer-ctas">
+          <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-lime">Book Marcus's Class</a>
+          <a href="https://open.spotify.com/user/27o6dvasevjepvdset19hwx3o" target="_blank" class="btn-spotify"><svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Spotify Playlist</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end trainer-cards -->
+
+  <!-- CTA -->
+  <div class="intro-block">
+    <div class="intro-kicker">Train With Us</div>
+    <div class="intro-headline">Book A<br>Class Today.</div>
+    <p class="intro-sub">First class just $10. Second class on us. Come meet the team in person.</p>
+    <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="btn-black">See The Schedule →</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="foot-logo">DR<span class="sl">/</span>VE</div>
+    <div class="foot-tagline">Cycle × Train × Sculpt · Norman, OK</div>
+    <div class="foot-nav">
+      <div class="foot-col"><div class="foot-col-title">Studio</div><a href="#" onclick="showPage('classes')">Class Types</a><a href="https://drive.myperformanceiq.com/bookings" target="_blank">Book a Class</a><a href="#" onclick="showPage('trainers')">Meet the Team</a><a href="#" onclick="showPage('home');scrollToSection('faq')">FAQ</a></div>
+      <div class="foot-col"><div class="foot-col-title">More</div><a href="https://apps.apple.com/us/app/drive/id6759316098" target="_blank">Download App</a><a href="https://www.instagram.com/drivetrainingclub" target="_blank">Instagram</a><a href="https://www.facebook.com/profile.php?id=61586036563419" target="_blank">Facebook</a></div>
+    </div>
+    <div class="foot-legal"><a href="https://www.drivetrainingclub.com/privacy-policy" target="_blank">Privacy Policy</a><a href="https://www.drivetrainingclub.com/terms-conditions" target="_blank">Terms</a><a href="https://www.drivetrainingclub.com/refund-policy" target="_blank">Refund Policy</a></div>
+    <div class="foot-copy">© 2026 DR/VE Training Club · Norman, Oklahoma</div>
+  </footer>
+
+</div><!-- end page-trainers -->
+
+<!-- STICKY CTA -->
+<button class="sticky-cta" id="stickyCta" onclick="window.open('https://drive.myperformanceiq.com/bookings','_blank')">Book a Class</button>
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
+<script>
+/* ── PAGE ROUTING ── */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  initReveals();
+}
+
+function scrollToSection(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 80);
+}
+
+/* ── HAMBURGER ── */
+const menuBtn = document.getElementById('menuBtn');
+const drawer = document.getElementById('drawer');
+
+menuBtn.addEventListener('click', () => {
+  const open = drawer.classList.toggle('open');
+  menuBtn.classList.toggle('open', open);
+  document.body.classList.toggle('scroll-locked', open);
+});
+
+function closeDrawer() {
+  drawer.classList.remove('open');
+  menuBtn.classList.remove('open');
+  document.body.classList.remove('scroll-locked');
+}
+
+/* ── FAQ ── */
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+/* ── MEMBERSHIP TABS ── */
+function switchMem(id, btn) {
+  document.querySelectorAll('.mem-pane').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.mem-toggle button').forEach(b => b.classList.remove('on'));
+  document.getElementById('pane-' + id).classList.add('on');
+  btn.classList.add('on');
+}
+
+/* ── SCROLL REVEALS ── */
+let revealObserver;
+function initReveals() {
+  if (revealObserver) revealObserver.disconnect();
+  const els = document.querySelectorAll('.page.active .reveal');
+  els.forEach(el => { el.classList.remove('in'); });
+  revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); revealObserver.unobserve(e.target); }
+    });
+  }, { threshold: 0.07 });
+  els.forEach(el => revealObserver.observe(el));
+}
+initReveals();
+
+/* ── STICKY CTA ── */
+const stickyCta = document.getElementById('stickyCta');
+window.addEventListener('scroll', () => {
+  stickyCta.classList.toggle('show', window.scrollY > 500);
+}, { passive: true });
+</script>
+
+</body>
+</html>

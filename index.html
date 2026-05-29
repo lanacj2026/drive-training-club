@@ -225,7 +225,7 @@ footer{background:var(--off-black);border-top:1px solid var(--border);padding:56
 .store-name{font-family:var(--fd);font-weight:900;font-size:22px;letter-spacing:.02em;text-transform:uppercase;line-height:1;display:block;}
 .app-store-btn.ghost-btn{background:transparent;color:var(--white);border:1px solid rgba(248,248,246,.25);}
 .app-store-btn.ghost-btn:hover{border-color:var(--lime);color:var(--lime);}
-/* Mockup: screen blend removes the black background from the PNG */
+/* Mockup: screen blend + vignette mask kills the dark background box */
 .app-mockup-wrap{display:flex;align-items:center;justify-content:center;position:relative;}
 .app-mockup-bg{
   position:absolute;
@@ -235,16 +235,19 @@ footer{background:var(--off-black);border-top:1px solid var(--border);padding:56
 }
 .app-mockup-img{
   width:100%;
-  max-width:280px;
+  max-width:420px;
   height:auto;
   display:block;
   position:relative;
   z-index:1;
   mix-blend-mode:screen;
   filter:brightness(1.05) contrast(1.02);
+  /* Fade edges so the dark square border disappears into the page bg */
+  -webkit-mask-image:radial-gradient(ellipse 78% 82% at 50% 50%, black 45%, transparent 75%);
+  mask-image:radial-gradient(ellipse 78% 82% at 50% 50%, black 45%, transparent 75%);
 }
 @media(max-width:767px){
-  .app-mockup-img{max-width:220px;margin:0 auto;}
+  .app-mockup-img{max-width:320px;margin:0 auto;}
   .app-store-btn{max-width:100%;}
 }
 /* CLASSES PAGE */
@@ -444,8 +447,8 @@ body.scroll-locked{overflow:hidden;}
     <div class="section-label">Community</div>
     <h2 class="section-title">What Our<br>Members Say.</h2>
     <div class="testi-scroll">
-      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-body">"The best place to workout in Norman!!!! I love all the different classes offered &amp; how each one challenges you in a different way. The atmosphere is always incredible &amp; you can tell they truly care about creating a great experience for everyone!"</p><div class="testi-name">Katie Brooks · Google Review</div></div>
-      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-body">"I get a good sweat out of every class. The instructors, staff and community are the best. I love DRIVE!"</p><div class="testi-name">Jacy Arroyo · Google Review</div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-body">"The best place to workout in Norman!!!! I love all the different classes offered &amp; how each one challenges you in a different way. The atmosphere is always incredible &amp; you can tell they truly care about creating a great experience for everyone!"</p><div class="testi-name">Verified Member · Norman, OK</div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-body">"I get a good sweat out of every class. The instructors, staff and community are the best. I love DRIVE!"</p><div class="testi-name">Verified Member · Norman, OK</div></div>
       <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-body">"DR/VE has completely changed the way I think about working out. The cross-training approach keeps things fresh every single week — I never dread coming in. The coaches genuinely push you while still making you feel like you belong. This community is something special."</p><div class="testi-name">Verified Member · Norman, OK</div></div>
     </div>
   </section>

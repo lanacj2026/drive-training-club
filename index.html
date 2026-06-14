@@ -316,6 +316,75 @@ footer{background:var(--off-black);border-top:1px solid var(--border);padding:56
 .btn-spotify:hover{background:#17a347;}
 .btn-spotify svg{width:20px;height:20px;fill:#fff;flex-shrink:0;}
 body.scroll-locked{overflow:hidden;}
+/* ══ BOOK PAGE ══ */
+.book-hero{padding:72px 24px 56px;background:var(--black);position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+.book-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 100% 80% at 50% 0%,rgba(182,255,57,.06) 0%,transparent 65%);}
+.book-eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:20px;display:flex;align-items:center;gap:10px;position:relative;}
+.book-eyebrow::before{content:'';width:20px;height:1px;background:var(--lime);}
+.book-title{font-family:var(--fd);font-weight:900;font-size:clamp(64px,20vw,110px);line-height:.88;letter-spacing:-.02em;text-transform:uppercase;margin-bottom:16px;position:relative;}
+.book-sub{font-size:15px;line-height:1.75;color:rgba(248,248,246,.6);position:relative;max-width:360px;}
+
+/* Format filter tabs */
+.book-filters{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--border);padding:0 24px;background:var(--black);position:sticky;top:60px;z-index:100;}
+.book-filters::-webkit-scrollbar{display:none;}
+.book-filter-btn{background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:14px 20px;white-space:nowrap;cursor:pointer;transition:all .2s;margin-bottom:-1px;}
+.book-filter-btn:hover{color:var(--white);}
+.book-filter-btn.on{color:var(--lime);border-bottom-color:var(--lime);}
+
+/* Class cards grid */
+.book-grid{padding:40px 24px 72px;display:flex;flex-direction:column;gap:2px;background:var(--black);}
+@media(min-width:768px){
+  .book-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;}
+}
+@media(min-width:1100px){
+  .book-grid{grid-template-columns:repeat(3,1fr);}
+}
+
+.book-card{background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:border-color .2s;}
+.book-card:hover{border-color:var(--lime);}
+.book-card[style*="display:none"]{display:none!important;}
+
+.book-card-top{padding:28px 24px 20px;flex:1;}
+.book-card-cat{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--fm);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  padding:4px 10px;border-radius:100px;border:1px solid;
+  margin-bottom:16px;
+}
+.cat-cycle{color:var(--lime);border-color:rgba(182,255,57,.3);background:rgba(182,255,57,.07);}
+.cat-train{color:#4488ff;border-color:rgba(68,136,255,.3);background:rgba(68,136,255,.07);}
+.cat-sculpt{color:#ffaa00;border-color:rgba(255,170,0,.3);background:rgba(255,170,0,.07);}
+
+.book-card-name{font-family:var(--fd);font-weight:900;font-size:clamp(32px,8vw,44px);line-height:.9;letter-spacing:-.01em;text-transform:uppercase;margin-bottom:14px;}
+.book-card-desc{font-size:13px;line-height:1.7;color:rgba(248,248,246,.62);margin-bottom:20px;}
+.book-card-meta{display:flex;gap:16px;flex-wrap:wrap;}
+.book-meta-item{display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.book-meta-item .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.dot-cycle{background:var(--lime);}
+.dot-train{background:#4488ff;}
+.dot-sculpt{background:#ffaa00;}
+
+.book-card-foot{padding:16px 24px;border-top:1px solid var(--border);background:rgba(0,0,0,.3);}
+.book-card-cta{
+  display:block;text-align:center;
+  background:var(--lime);color:var(--black);
+  font-family:var(--fd);font-weight:900;font-size:17px;
+  letter-spacing:.05em;text-transform:uppercase;
+  padding:14px;border-radius:2px;
+  text-decoration:none;transition:background .2s;
+}
+.book-card-cta:hover{background:var(--lime-dk);}
+
+/* Intro strip on book page */
+.book-intro-strip{background:var(--lime);padding:40px 24px;display:flex;flex-direction:column;gap:16px;}
+@media(min-width:640px){.book-intro-strip{flex-direction:row;align-items:center;justify-content:space-between;}}
+.book-intro-text{}
+.book-intro-label{font-family:var(--fm);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(0,0,0,.5);margin-bottom:6px;}
+.book-intro-headline{font-family:var(--fd);font-weight:900;font-size:clamp(32px,8vw,52px);line-height:.9;letter-spacing:-.01em;text-transform:uppercase;color:var(--black);}
+.book-intro-sub{font-size:14px;color:rgba(0,0,0,.65);margin-top:8px;}
+.book-intro-btn{display:block;text-align:center;background:var(--black);color:var(--lime);font-family:var(--fd);font-weight:900;font-size:18px;letter-spacing:.05em;text-transform:uppercase;padding:16px 28px;border-radius:2px;white-space:nowrap;flex-shrink:0;transition:background .2s;}
+.book-intro-btn:hover{background:#1a1a1a;}
+
 </style>
 </head>
 <body>
@@ -325,7 +394,7 @@ body.scroll-locked{overflow:hidden;}
 <nav id="mainNav">
   <span class="nav-logo" onclick="showPage('home')">DR<span class="sl">/</span>VE</span>
   <div class="nav-right">
-    <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="nav-pill">Book</a>
+    <button onclick="showPage('book')" class="nav-pill">Book</button>
     <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="nav-pill ghost">Buy</a>
     <button class="hamburger" id="menuBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
@@ -334,13 +403,14 @@ body.scroll-locked{overflow:hidden;}
   <div class="drawer-links">
     <a href="#" onclick="showPage('home');closeDrawer();">Home</a>
     <a href="#" onclick="showPage('classes');closeDrawer();">Workouts</a>
+    <a href="#" onclick="showPage('book');closeDrawer();">Book</a>
     <a href="#" onclick="showPage('trainers');closeDrawer();">Team</a>
     <a href="#" onclick="showPage('home');closeDrawer();scrollToSection('memberships');">Pricing</a>
     <a href="#" onclick="showPage('home');closeDrawer();scrollToSection('faq');">FAQ</a>
     <a href="#" onclick="showPage('home');closeDrawer();scrollToSection('contact');">Contact</a>
   </div>
   <div class="drawer-actions">
-    <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="nav-pill">Book a Class</a>
+    <button onclick="showPage('book');closeDrawer();" class="nav-pill" style="text-align:center;">Book a Class</button>
     <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="nav-pill ghost">Intro Offer — $10</a>
   </div>
   <div class="drawer-foot">
@@ -544,8 +614,8 @@ body.scroll-locked{overflow:hidden;}
     <div class="foot-logo">DR<span class="sl">/</span>VE</div>
     <div class="foot-tagline">Cycle × Train × Sculpt · Norman, OK</div>
     <div class="foot-nav">
-      <div class="foot-col"><div class="foot-col-title">Studio</div><a href="#" onclick="showPage('classes')">Class Types</a><a href="https://drive.myperformanceiq.com/bookings" target="_blank">Book a Class</a><a href="#" onclick="showPage('trainers')">Meet the Team</a><a href="#" onclick="scrollToSection('faq')">FAQ</a><a href="https://www.drivetrainingclub.com/ambassadors" target="_blank">Ambassadors</a></div>
-      <div class="foot-col"><div class="foot-col-title">More</div><a href="https://apps.apple.com/us/app/drive/id6759316098" target="_blank">Download App</a><a href="https://www.instagram.com/drivetrainingclub" target="_blank">Instagram</a><a href="https://www.facebook.com/profile.php?id=61586036563419" target="_blank">Facebook</a><a href="https://www.drivetrainingclub.com/blog/categories/cycle" target="_blank">Blog</a><a href="https://www.drivetrainingclub.com/category/all-products" target="_blank">Shop</a></div>
+      <div class="foot-col"><div class="foot-col-title">Studio</div><a href="#" onclick="showPage('classes')">Class Types</a><a href="#" onclick="showPage('book')">Book a Class</a><a href="#" onclick="showPage('trainers')">Meet the Team</a><a href="#" onclick="scrollToSection('faq')">FAQ</a></div>
+      <div class="foot-col"><div class="foot-col-title">More</div><a href="https://apps.apple.com/us/app/drive/id6759316098" target="_blank">Download App</a><a href="https://www.instagram.com/drivetrainingclub" target="_blank">Instagram</a><a href="https://www.facebook.com/profile.php?id=61586036563419" target="_blank">Facebook</a><a href="https://www.drivetrainingclub.com/blog/categories/cycle" target="_blank">Blog</a></div>
     </div>
     <div class="foot-social">
       <a href="https://www.instagram.com/drivetrainingclub" target="_blank" class="social-icon" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
@@ -784,7 +854,172 @@ body.scroll-locked{overflow:hidden;}
   </footer>
 </div>
 
-<button class="sticky-cta" id="stickyCta" onclick="window.open('https://drive.myperformanceiq.com/bookings','_blank')">Book a Class</button>
+<div class="page" id="page-book">
+
+  <!-- Hero -->
+  <div class="book-hero">
+    <div class="book-eyebrow">Reserve Your Spot</div>
+    <h1 class="book-title">Choose<br>Your<br>Format.</h1>
+    <p class="book-sub">Reserve your spot, train with purpose. All classes on one membership — or drop in anytime.</p>
+  </div>
+
+  <!-- Intro strip -->
+  <div class="book-intro-strip">
+    <div class="book-intro-text">
+      <div class="book-intro-label">Special Intro Offer</div>
+      <div class="book-intro-headline">First Class $10.<br>Second Class Free.</div>
+      <div class="book-intro-sub">No commitment required. Try any format.</div>
+    </div>
+    <a href="https://app.clubready.com/JoinUs/15278/646543" target="_blank" class="book-intro-btn">Claim Offer →</a>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="book-filters">
+    <button class="book-filter-btn on" onclick="filterClasses('all',this)">All Classes</button>
+    <button class="book-filter-btn" onclick="filterClasses('cycle',this)">Cycle</button>
+    <button class="book-filter-btn" onclick="filterClasses('train',this)">Train</button>
+    <button class="book-filter-btn" onclick="filterClasses('sculpt',this)">Sculpt</button>
+  </div>
+
+  <!-- Class cards -->
+  <div class="book-grid" id="bookGrid">
+
+    <!-- /CYCLE45:CLASSIC -->
+    <div class="book-card" data-cat="cycle">
+      <div class="book-card-top">
+        <div class="book-card-cat cat-cycle">● Cycle</div>
+        <div class="book-card-name">/CYCLE45:<br>CLASSIC</div>
+        <p class="book-card-desc">A rhythm-based ride designed to build cardiovascular endurance, power, and stamina. This full-body cycling experience blends speed, resistance, and intentional movement to challenge both physical and mental limits. Expect a high-energy atmosphere with structured intervals that leave you stronger and more resilient every ride.</p>
+        <div class="book-card-meta">
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>45 min</div>
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>Low Impact</div>
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>High Intensity</div>
+        </div>
+      </div>
+      <div class="book-card-foot">
+        <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="book-card-cta">See Schedule &amp; Book</a>
+      </div>
+    </div>
+
+    <!-- /CYCLE45:CLIMB -->
+    <div class="book-card" data-cat="cycle">
+      <div class="book-card-top">
+        <div class="book-card-cat cat-cycle">● Cycle</div>
+        <div class="book-card-name">/CYCLE45:<br>CLIMB</div>
+        <p class="book-card-desc">A strength-driven cycling class focused on resistance, control, and muscular endurance. Slower tempos and heavier loads target the legs and glutes while building power and mental grit. Ideal for developing sustained strength and improving overall cycling performance.</p>
+        <div class="book-card-meta">
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>45 min</div>
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>Low Impact</div>
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>High Intensity</div>
+        </div>
+      </div>
+      <div class="book-card-foot">
+        <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="book-card-cta">See Schedule &amp; Book</a>
+      </div>
+    </div>
+
+    <!-- /CYCLE30 -->
+    <div class="book-card" data-cat="cycle">
+      <div class="book-card-top">
+        <div class="book-card-cat cat-cycle">● Cycle</div>
+        <div class="book-card-name">/CYCLE30</div>
+        <p class="book-card-desc">A 30-minute, high-intensity indoor cycling class designed for maximum impact in minimal time. Expect intentional intervals, rhythm-based movement, and powerful pushes that challenge your endurance. You'll leave feeling energized, accomplished, and ready to take on the rest of your day.</p>
+        <div class="book-card-meta">
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>30 min</div>
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>Low Impact</div>
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>High Intensity</div>
+        </div>
+      </div>
+      <div class="book-card-foot">
+        <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="book-card-cta">See Schedule &amp; Book</a>
+      </div>
+    </div>
+
+    <!-- /CYCLE × TRAIN -->
+    <div class="book-card" data-cat="cycle">
+      <div class="book-card-top">
+        <div class="book-card-cat cat-cycle">● Cycle + Train</div>
+        <div class="book-card-name">/CYCLE<br>× TRAIN</div>
+        <p class="book-card-desc">A hybrid class combining high-intensity cycling with off-the-bike strength training for a full-spectrum workout. Builds cardiovascular endurance, power, and muscular strength in a single session — maximizing efficiency without sacrificing performance.</p>
+        <div class="book-card-meta">
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>45 min</div>
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>Mixed Impact</div>
+          <div class="book-meta-item"><div class="dot dot-cycle"></div>High Intensity</div>
+        </div>
+      </div>
+      <div class="book-card-foot">
+        <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="book-card-cta">See Schedule &amp; Book</a>
+      </div>
+    </div>
+
+    <!-- /TRAIN45 -->
+    <div class="book-card" data-cat="train">
+      <div class="book-card-top">
+        <div class="book-card-cat cat-train">● Train</div>
+        <div class="book-card-name">/TRAIN45</div>
+        <p class="book-card-desc">A total-body strength class centered on progressive overload, functional movement, and athletic performance. Using dumbbells, barbells, and bodyweight, Train45 builds muscle, improves stability, and increases overall strength. Designed to support long-term results and smarter training.</p>
+        <div class="book-card-meta">
+          <div class="book-meta-item"><div class="dot dot-train"></div>45 min</div>
+          <div class="book-meta-item"><div class="dot dot-train"></div>Med Impact</div>
+          <div class="book-meta-item"><div class="dot dot-train"></div>High Intensity</div>
+        </div>
+      </div>
+      <div class="book-card-foot">
+        <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="book-card-cta">See Schedule &amp; Book</a>
+      </div>
+    </div>
+
+    <!-- /SCULPT45:TONE -->
+    <div class="book-card" data-cat="sculpt">
+      <div class="book-card-top">
+        <div class="book-card-cat cat-sculpt">● Sculpt</div>
+        <div class="book-card-name">/SCULPT45:<br>TONE</div>
+        <p class="book-card-desc">A targeted toning class focused on high-repetition, low-impact movements that lengthen and define muscle. Using lighter weights and bodyweight resistance, Sculpt Tone creates a deep burn while improving posture and muscle definition. Expect controlled, intentional work that delivers refined results.</p>
+        <div class="book-card-meta">
+          <div class="book-meta-item"><div class="dot dot-sculpt"></div>45 min</div>
+          <div class="book-meta-item"><div class="dot dot-sculpt"></div>Low Impact</div>
+          <div class="book-meta-item"><div class="dot dot-sculpt"></div>Med Intensity</div>
+        </div>
+      </div>
+      <div class="book-card-foot">
+        <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="book-card-cta">See Schedule &amp; Book</a>
+      </div>
+    </div>
+
+    <!-- /SCULPT45:FLOW -->
+    <div class="book-card" data-cat="sculpt">
+      <div class="book-card-top">
+        <div class="book-card-cat cat-sculpt">● Sculpt</div>
+        <div class="book-card-name">/SCULPT45:<br>FLOW</div>
+        <p class="book-card-desc">A low-impact, continuous flow class emphasizing mobility, core strength, and controlled movement. Sculpt Flow improves balance, flexibility, and muscular endurance while keeping the body feeling strong and aligned. Perfect for active recovery days or pairing with higher-intensity training.</p>
+        <div class="book-card-meta">
+          <div class="book-meta-item"><div class="dot dot-sculpt"></div>45 min</div>
+          <div class="book-meta-item"><div class="dot dot-sculpt"></div>Low Impact</div>
+          <div class="book-meta-item"><div class="dot dot-sculpt"></div>Low–Med Intensity</div>
+        </div>
+      </div>
+      <div class="book-card-foot">
+        <a href="https://drive.myperformanceiq.com/bookings" target="_blank" class="book-card-cta">See Schedule &amp; Book</a>
+      </div>
+    </div>
+
+  </div><!-- end book-grid -->
+
+  <footer>
+    <div class="foot-logo">DR<span class="sl">/</span>VE</div>
+    <div class="foot-tagline">Cycle × Train × Sculpt · Norman, OK</div>
+    <div class="foot-nav">
+      <div class="foot-col"><div class="foot-col-title">Studio</div><a href="#" onclick="showPage('classes')">Class Types</a><a href="#" onclick="showPage('book')">Book a Class</a><a href="#" onclick="showPage('trainers')">Meet the Team</a><a href="#" onclick="showPage('home');scrollToSection('faq')">FAQ</a></div>
+      <div class="foot-col"><div class="foot-col-title">More</div><a href="https://apps.apple.com/us/app/drive/id6759316098" target="_blank">Download App</a><a href="https://www.instagram.com/drivetrainingclub" target="_blank">Instagram</a><a href="https://www.facebook.com/profile.php?id=61586036563419" target="_blank">Facebook</a><a href="https://www.drivetrainingclub.com/blog/categories/cycle" target="_blank">Blog</a></div>
+    </div>
+    <div class="foot-legal"><a href="https://www.drivetrainingclub.com/privacy-policy" target="_blank">Privacy Policy</a><a href="https://www.drivetrainingclub.com/terms-conditions" target="_blank">Terms</a><a href="https://www.drivetrainingclub.com/refund-policy" target="_blank">Refund Policy</a></div>
+    <div class="foot-copy">© 2026 DR/VE Training Club · Norman, Oklahoma</div>
+  </footer>
+
+</div><!-- end page-book -->
+
+
+<button class="sticky-cta" id="stickyCta" onclick="showPage('book')">Book a Class</button>
 
 <script>
 function showPage(id){
@@ -829,6 +1064,18 @@ function initReveals(){
 initReveals();
 const stickyCta=document.getElementById('stickyCta');
 window.addEventListener('scroll',()=>{stickyCta.classList.toggle('show',window.scrollY>500);},{passive:true});
+
+function filterClasses(cat, btn) {
+  document.querySelectorAll('.book-filter-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.book-card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
 </script>
 </body>
 </html>
